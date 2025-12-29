@@ -17,26 +17,7 @@
             color: #fff;
             overflow-x: hidden;
         }
-    .toggle-3d {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 12px 24px;
-    border-radius: 50px;
-    color: #fff;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    font-weight: 600;
-    }
 
-    .toggle-3d:hover {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    }
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -483,7 +464,6 @@
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-    <button class="toggle-3d" id="toggle3d">3D ON</button>
     <nav id="navbar">
         <div class="logo">My Portfolio</div>
         <div class="hamburger" id="hamburger">
@@ -718,16 +698,6 @@
         camera.position.z = 50;
 
         let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
-        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
-        let is3DActive = true;
-
-        document.getElementById('toggle3d').addEventListener('click', function() {
-            is3DActive = true;
-            this.textContent = is3DActive ? '3D ON' : '3D OFF';
-            canvas.style.transition = 'opacity 0.5 ease';
-            canvas.style.opacity = is3DActive ? '1': '0';
-            canvas.style.display = is3DActive ? 'block': 'none';
-        });
         document.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -769,4 +739,5 @@
 </body>
 
 </html>
+
 
