@@ -722,9 +722,11 @@
         let is3DActive = true;
 
         document.getElementById('toggle3d').addEventListener('click', function() {
-            is3DActive = !is3DActive;
+            is3DActive = true;
             this.textContent = is3DActive ? '3D ON' : '3D OFF';
-            canvas.style.opacity = is3DActive ? '1' : '0';
+            canvas.style.transition = 'opacity 0.5 ease';
+            canvas.style.opacity = is3DActive ? '1': '0';
+            canvas.style.display = is3DActive ? 'block': 'none';
         });
         document.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
@@ -767,3 +769,4 @@
 </body>
 
 </html>
+
