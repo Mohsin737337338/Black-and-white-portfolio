@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohsin Mehmood - Portfolio Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 15px 50px;
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 5px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: #ccc;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero .subtitle {
+            font-size: 18px;
+            color: #aaa;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
+        }
+
+        .section {
+            padding: 100px 50px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .section h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .about-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2);
+        }
+
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .card p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .work-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .work-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.3);
+        }
+
+        .work-img {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .work-content {
+            padding: 30px;
+        }
+
+        .work-content h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .work-content p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .work-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .work-link:hover {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-item a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .contact-item a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 50px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-bottom {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .footer-bottom p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: right 0.4s ease;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 24px;
+            }
+
+            .hero {
+                padding: 120px 20px;
+                min-height: 100vh;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero .subtitle {
+                font-size: 15px;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .section h2 {
+                font-size: 32px;
+            }
+
+            .about-grid, .work-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card, .work-content {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav id="navbar">
+        <div class="logo">My Portfolio</div>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Hello, I'm Mohsin Mehmood</h1>
+            <p class="subtitle">FSc ICS Student | Web Developer | Portfolio Design Specialist</p>
+            <p>I specialize in creating stunning portfolio websites with beautiful UI/UX design and interactive 3D experiences using Three.js.</p>
+            <a href="#contact" class="cta-button">Get In Touch</a>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div class="section-content">
+            <h2>About Me</h2>
+            <div class="about-text">
+                <p>I'm Mohsin Mehmood, an FSc student studying ICS with a passion for web development. My true specialization lies in portfolio design and development, creating beautiful, interactive, and responsive portfolios that leave lasting impressions.</p>
+            </div>
+            <div class="about-grid">
+                <div class="card">
+                    <h3>Portfolio Design</h3>
+                    <p>Specialized in creating stunning portfolio websites with beautiful UI/UX design, ensuring every element tells your unique story.</p>
+                </div>
+                <div class="card">
+                    <h3>3D Web Experiences</h3>
+                    <p>Expert in Three.js and WebGL, building immersive 3D portfolios with interactive elements that captivate visitors.</p>
+                </div>
+                <div class="card">
+                    <h3>Responsive Development</h3>
+                    <p>All my portfolio designs are fully responsive, ensuring perfect display across all devices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="work">
+        <div class="section-content">
+            <h2>Featured Portfolios</h2>
+            <div class="work-grid">
+                <div class="work-card">
+                    <div class="work-img">🎨</div>
+                    <div class="work-content">
+                        <h3>Creative Designer Portfolio</h3>
+                        <p>Minimalist black and white portfolio featuring smooth animations and elegant typography.</p>
+                        <a href="#" class="work-link">View Portfolio →</a>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="work-img">💼</div>
+                    <div class="work-content">
+                        <h3>3D Developer Showcase</h3>
+                        <p>Interactive 3D portfolio with particle systems and WebGL effects.</p>
+                        <a href="#" class="work-link">View Portfolio →</a>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="work-img">📸</div>
+                    <div class="work-content">
+                        <h3>Photography Portfolio</h3>
+                        <p>Stunning visual portfolio with grid layouts and lightbox galleries.</p>
+                        <a href="#" class="work-link">View Portfolio →</a>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="work-img">✨</div>
+                    <div class="work-content">
+                        <h3>Luxury Brand Portfolio</h3>
+                        <p>Elegant portfolio with premium animations and seamless transitions.</p>
+                        <a href="#" class="work-link">View Portfolio →</a>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="work-img">🚀</div>
+                    <div class="work-content">
+                        <h3>Startup Tech Portfolio</h3>
+                        <p>Modern and dynamic portfolio featuring bold typography and innovative layouts.</p>
+                        <a href="#" class="work-link">View Portfolio →</a>
+                    </div>
+                </div>
+                <div class="work-card">
+                    <div class="work-img">🎭</div>
+                    <div class="work-content">
+                        <h3>Artist Portfolio</h3>
+                        <p>Creative showcase with parallax effects and immersive storytelling elements.</p>
+                        <a href="#" class="work-link">View Portfolio →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <div class="section-content">
+            <div class="contact-content">
+                <h2>Get In Touch</h2>
+                <p style="color: #ccc; margin-top: 20px;">Let's create something amazing together! Feel free to reach out for portfolio design services.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>📧 Email</h3>
+                        <a href="mailto:janjuamohsin937@gmail.com">janjuamohsin937@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <h3>📱 Phone</h3>
+                        <a href="tel:+923028948371">+92 302 8948371</a>
+                    </div>
+                    <div class="contact-item">
+                        <h3>🌍 Location</h3>
+                        <a href="#">Rawalpindi, Pakistan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#work">Work</a>
+                <a href="#contact">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mohsin Mehmood. All rights reserved.</p>
+                <p>Designed & Developed with ♥ by Mohsin Mehmood</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const navbar = document.getElementById('navbar');
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const isMobile = window.innerWidth < 768;
+        const starCount = isMobile ? 8000 : 20000;
+        
+        const starsGeo = new THREE.BufferGeometry();
+        const starPos = new Float32Array(starCount * 3);
+
+        for (let i = 0; i < starCount; i++) {
+            const i3 = i * 3;
+            const r = Math.random() * 150 + 50;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(Math.random() * 2 - 1);
+            
+            starPos[i3] = r * Math.sin(phi) * Math.cos(theta);
+            starPos[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            starPos[i3 + 2] = r * Math.cos(phi);
+        }
+
+        starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+
+        const starsMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.3,
+            transparent: true,
+            opacity: 0.9,
+            blending: THREE.AdditiveBlending
+        });
+
+        const stars = new THREE.Points(starsGeo, starsMat);
+        scene.add(stars);
+
+        const glowCount = isMobile ? 100 : 300;
+        const glowGeo = new THREE.BufferGeometry();
+        const glowPos = new Float32Array(glowCount * 3);
+
+        for (let i = 0; i < glowCount * 3; i++) {
+            glowPos[i] = (Math.random() - 0.5) * 200;
+        }
+
+        glowGeo.setAttribute('position', new THREE.BufferAttribute(glowPos, 3));
+
+        const glowMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 2,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const glowStars = new THREE.Points(glowGeo, glowMat);
+        scene.add(glowStars);
+
+        camera.position.z = 50;
+
+        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            targetX += (mouseX * 20 - targetX) * 0.02;
+            targetY += (mouseY * 20 - targetY) * 0.02;
+
+            stars.rotation.x = targetY * 0.05 + scrollY * 0.0002 + t * 0.01;
+            stars.rotation.y = targetX * 0.05 + t * 0.02;
+
+            glowStars.rotation.x = -targetY * 0.03 + scrollY * 0.0001;
+            glowStars.rotation.y = -targetX * 0.03 + t * 0.015;
+
+            camera.position.x = targetX * 0.3;
+            camera.position.y = targetY * 0.3 - scrollY * 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
