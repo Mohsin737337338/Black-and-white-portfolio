@@ -645,7 +645,7 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         const isMobile = window.innerWidth < 768;
-        const starCount = isMobile ? 8000 : 20000;
+        const starCount = isMobile ? 8000: 20000;
         
         const starsGeo = new THREE.BufferGeometry();
         const starPos = new Float32Array(starCount * 3);
@@ -674,7 +674,7 @@
         const stars = new THREE.Points(starsGeo, starsMat);
         scene.add(stars);
 
-        const glowCount = isMobile ? 100 : 300;
+        const glowCount = isMobile ? 100:300;
         const glowGeo = new THREE.BufferGeometry();
         const glowPos = new Float32Array(glowCount * 3);
 
@@ -698,6 +698,7 @@
         camera.position.z = 50;
 
         let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, scrollY = 0;
+        
         document.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -739,5 +740,6 @@
 </body>
 
 </html>
+
 
 
